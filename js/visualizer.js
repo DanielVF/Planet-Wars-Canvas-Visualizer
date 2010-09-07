@@ -12,6 +12,7 @@ var Visualizer = {
       framerate: 5,
       teamColor: ['rgb(72,84,84)','rgb(120,168,192)','rgb(192,0,0)']
     },
+    frameNumber: 0,
     
     setup: function() {
         // Setup Context
@@ -29,6 +30,12 @@ var Visualizer = {
     
     unitToPixel: function(unit) {
         return this.config.unit_to_pixel * unit;
+    },
+    
+    setFrame: function(frameNumber) {
+      this.frameNumber = frameNumber
+      this.planets = this.moves[frameNumber].planets
+      this.fleets = this.moves[frameNumber].moving
     },
     
     drawFrame: function() { 
@@ -103,5 +110,6 @@ var Visualizer = {
 (function($) {
     Visualizer.setup();
     Visualizer.parseData(data);
+    Visualizer.setFrame(0)
     Visualizer.drawFrame();
 })(window.jQuery);
