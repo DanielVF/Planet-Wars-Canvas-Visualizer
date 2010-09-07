@@ -1,6 +1,7 @@
 var Visualizer = {
     canvas: null,
     ctx: null,
+    background: new Image(),
     planets: [],
     config : {
       planet_font: 'bold 15px Arial,Helvetica ',
@@ -17,33 +18,42 @@ var Visualizer = {
         this.ctx = this.canvas.getContext('2d');
         this.ctx.textAlign = 'center'
         this.ctx.font = this.config.planet_font
+        
+        // Load background
+        this.background.src = 'bg.jpg';
 
-        // Calucated configs
+        // Calcucated configs
         this.config.unit_to_pixel = (this.config.display_size - this.config.display_margin * 2) / 24;
     },
     
     unitToPixel: function(unit) {
         return this.config.unit_to_pixel * unit;
     },
-
+    
     drawFrame: function() { 
         var disp_x = 0, disp_y = 0;
-
         var ctx = this.ctx;
         
-        ctx.fillStyle = "#000";
-        ctx.fillRect(0, 0, this.config.display_size, this.config.display_size);
+        ctx.drawImage(this.background, 0, 0);
 
         for(var i = 0; i < this.planets.length; i++) {
             var planet = this.planets[i];
 
-            ctx.fillStyle = this.config.teamColor[planet.owner]
-
             disp_x = this.unitToPixel(planet.x) + this.config.display_margin;
             disp_y = this.unitToPixel(planet.y) + this.config.display_margin;
+
+            // Add shadow
+            ctx.beginPath();
+            ctx.arc(this.canvas.width - disp_x + 1, disp_y + 2, this.config.planet_pixels[planet.growthRate], 0, Math.PI*2, true); 
+            ctx.closePath();
+            ctx.fillStyle = "#000";
+            ctx.fill();
+
+            // Draw circle
             ctx.beginPath();
             ctx.arc(this.canvas.width - disp_x, disp_y, this.config.planet_pixels[planet.growthRate], 0, Math.PI*2, true); 
             ctx.closePath();
+            ctx.fillStyle = this.config.teamColor[planet.owner]
             ctx.fill();
 
             ctx.fillStyle = "#fff";
