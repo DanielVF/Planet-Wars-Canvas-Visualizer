@@ -12,7 +12,6 @@ var Visualizer = {
       framerate: 5,
       teamColor: ['rgb(72,84,84)','rgb(120,168,192)','rgb(192,0,0)']
     },
-    frameNumber: 0,
     
     setup: function() {
         // Setup Context
@@ -32,20 +31,19 @@ var Visualizer = {
         return this.config.unit_to_pixel * unit;
     },
     
-    setFrame: function(frameNumber) {
-      this.frameNumber = frameNumber
-      this.planets = this.moves[frameNumber].planets
-      this.fleets = this.moves[frameNumber].moving
-    },
-    
-    drawFrame: function() { 
+    drawFrame: function(frameNumber) { 
         var disp_x = 0, disp_y = 0;
         var ctx = this.ctx;
         
         ctx.drawImage(this.background, 0, 0);
+        
+        var planetStats = this.moves[frameNumber].planets
+        var fleets = this.moves[frameNumber].moving
 
         for(var i = 0; i < this.planets.length; i++) {
             var planet = this.planets[i];
+            var owner = planetStats[i][0];
+            var numShips = planetStats[i][1];
 
             disp_x = this.unitToPixel(planet.x) + this.config.display_margin;
             disp_y = this.unitToPixel(planet.y) + this.config.display_margin;
@@ -61,11 +59,35 @@ var Visualizer = {
             ctx.beginPath();
             ctx.arc(this.canvas.width - disp_x, disp_y, this.config.planet_pixels[planet.growthRate], 0, Math.PI*2, true); 
             ctx.closePath();
-            ctx.fillStyle = this.config.teamColor[planet.owner]
+            ctx.fillStyle = this.config.teamColor[owner]
             ctx.fill();
 
             ctx.fillStyle = "#fff";
-            ctx.fillText(planet.numShips, this.canvas.width - disp_x, disp_y+5);
+            ctx.fillText(numShips, this.canvas.width - disp_x, disp_y+5);
+        }
+        
+        for(var i = 0; i < fleets.length; i++) {
+          var x = 0, y = 0;
+          
+          disp_x = this.unitToPixel(x) + this.config.display_margin;
+          disp_y = this.unitToPixel(y) + this.config.display_margin;
+          
+          ctx.fillStyle = "rgb(120,168,192)"
+          ctx.beginPath();
+          ctx.save();
+          ctx.translate(80, 80);
+          ctx.scale(0.1,0.1);
+          // ctx.rotate();
+          ctx.moveTo(0, -10);
+          ctx.lineTo(40,-30);
+          ctx.lineTo(0, 100);
+          ctx.lineTo(-40, -30);
+          ctx.closePath();
+          ctx.fill();
+          ctx.strokeStyle = "#fff"
+          ctx.stroke();
+          ctx.restore();
+          
         }
     },
     
@@ -116,6 +138,5 @@ var Visualizer = {
 (function($) {
     Visualizer.setup();
     Visualizer.parseData(data);
-    Visualizer.setFrame(0)
-    Visualizer.drawFrame();
+    Visualizer.drawFrame(2);
 })(window.jQuery);
