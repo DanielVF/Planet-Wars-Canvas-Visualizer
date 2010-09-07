@@ -67,6 +67,7 @@ var Visualizer = {
         
         // planets: [(x,y,owner,numShips,growthRate)]
         var map = data[0].split(':').map(function(a) { return a.split(','); });
+        this.initMap(map);
 
         // turns: [(owner,numShips)] 
         // ++ [(owner,numShips,sourcePlanet,destinationPlanet,totalTripLength,turnsRemaining)]
