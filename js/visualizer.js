@@ -3,6 +3,7 @@ var Visualizer = {
     ctx: null,
     background: new Image(),
     planets: [],
+    moves: [],
     config : {
       planet_font: 'bold 15px Arial,Helvetica ',
       planet_pixels: [10,13,18,21,23,29],
@@ -61,6 +62,25 @@ var Visualizer = {
         }
     },
     
+    parseData: function(data) {
+        data = data.split('|');
+        
+        // planets: [(x,y,owner,numShips,growthRate)]
+        var map = data[0].split(':').map(function(a) { return a.split(','); });
+
+        // turns: [(owner,numShips)] 
+        // ++ [(owner,numShips,sourcePlanet,destinationPlanet,totalTripLength,turnsRemaining)]
+        var turns = data[1].split(':');
+        for(var i = 0; i < turns.length; i++) {
+            var turn = turns[i].split(',');
+            
+            this.moves.push({
+               'planets': turn.slice(0, map.length).map(function(a) { return a.split('.'); }),
+               'moving': turn.slice(map.length).map(function(a) { return a.split('.'); })
+            });
+        }
+    },
+    
     initMap: function(data) {
         // [(x,y,owner,numShips,growthRate)]
         for(var i = 0; i < data.length; i++) {
@@ -74,7 +94,6 @@ var Visualizer = {
             };
             this.planets.push(planet);
         }
-        this.drawFrame();
     },
     
     _eof: true
@@ -82,5 +101,6 @@ var Visualizer = {
 
 (function($) {
     Visualizer.setup();
-    Visualizer.initMap(data.map);
+    Visualizer.parseData(data);
+    Visualizer.drawFrame();
 })(window.jQuery);

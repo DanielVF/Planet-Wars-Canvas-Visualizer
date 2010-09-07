@@ -15,31 +15,7 @@
   <script>
 <?php
 $input = file_get_contents('input');
-$input = explode('|', $input);
-
-// planets: [(x,y,owner,numShips,growthRate)]
-$map = array_map(
-  function($a) { return explode(',', $a); },
-  explode(':', $input[0])
-);
-
-// turns: [(owner,numShips)] ++ [(owner,numShips,sourcePlanet,destinationPlanet,totalTripLength,turnsRemaining)]
-$turns = explode(':', $input[1]);
-foreach($turns as &$turn) {
-  $turn = explode(',', $turn);
-
-  $planets = array_map(
-      function($a) { return explode('.', $a); }, 
-      array_slice($turn, 0, count($map))
-  );
-  $moving = array_map(
-      function($a) { return explode('.', $a); },
-      array_slice($turn, count($map))
-  );
-
-  $turn = array('planets' => $planets, 'moving' => $moving);
-}
-echo 'var data = ' . json_encode(array('map' => $map, 'turns' => $turns)) . ';';
+echo 'var data = "' . $input . '"';
 ?>
   </script>
 
