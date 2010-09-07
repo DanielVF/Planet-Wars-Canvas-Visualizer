@@ -56,7 +56,7 @@ echo 'var data = ' . json_encode(array('map' => $map, 'turns' => $turns)) . ';';
     </header>
     
     <div id="main">
-        <canvas id="display" width="500" height="400"></canvas>
+        <canvas id="display" width="640" height="640"></canvas>
     </div>
     
     <footer>
