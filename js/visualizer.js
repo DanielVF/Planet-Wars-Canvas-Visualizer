@@ -66,8 +66,14 @@ var Visualizer = {
         data = data.split('|');
         
         // planets: [(x,y,owner,numShips,growthRate)]
-        var map = data[0].split(':').map(function(a) { return a.split(','); });
-        this.initMap(map);
+        var planets = data[0].split(':').map(function(a) { return a.split(','); });
+        this.initMap(planets);
+        
+        // insert planets as first move
+        this.moves.push({
+           'planets': planets.map(function(a) { return [a[2], a[3]]; }),
+           'moving': []
+        });
 
         // turns: [(owner,numShips)] 
         // ++ [(owner,numShips,sourcePlanet,destinationPlanet,totalTripLength,turnsRemaining)]
@@ -76,8 +82,8 @@ var Visualizer = {
             var turn = turns[i].split(',');
             
             this.moves.push({
-               'planets': turn.slice(0, map.length).map(function(a) { return a.split('.'); }),
-               'moving': turn.slice(map.length).map(function(a) { return a.split('.'); })
+               'planets': turn.slice(0, planets.length).map(function(a) { return a.split('.'); }),
+               'moving': turn.slice(planets.length).map(function(a) { return a.split('.'); })
             });
         }
     },
