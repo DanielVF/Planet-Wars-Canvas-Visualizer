@@ -7,7 +7,8 @@ var Visualizer = {
       planet_pixels: [10,13,18,21,23,29],
       display_size: 640,
       display_margin: 50,
-      framerate: 5
+      framerate: 5,
+      teamColor: ['rgb(72,84,84)','rgb(120,168,192)','rgb(192,0,0)']
     },
     
     setup: function() {
@@ -36,13 +37,7 @@ var Visualizer = {
         for(var i = 0; i < this.planets.length; i++) {
             var planet = this.planets[i];
 
-            if(planet.owner == 1){
-                ctx.fillStyle = "rgb(120,168,192)"; 
-            } else if (planet.owner == 2){
-                ctx.fillStyle = "rgb(192,0,0)"; 
-            } else{
-                ctx.fillStyle = "rgb(72,84,84)"; 
-            }
+            ctx.fillStyle = this.config.teamColor[planet.owner]
 
             disp_x = this.unitToPixel(planet.x) + this.config.display_margin;
             disp_y = this.unitToPixel(planet.y) + this.config.display_margin;
