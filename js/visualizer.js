@@ -2,7 +2,7 @@ var Visualizer = {
     canvas: null,
     ctx: null,
     frame: 0,
-    timer: null,
+    playing: false,
     haveDrawnBackground: false,
     frameDrawStarted: null,
     frameDrawEnded: null,
@@ -19,14 +19,20 @@ var Visualizer = {
       teamColor: ['rgb(72,84,84)','rgb(192,0,0)','rgb(120,168,192)']
     },
     
-    setup: function() {
+    setup: function(data) {
         // Setup Context
         this.canvas = document.getElementById('display');
         this.ctx = this.canvas.getContext('2d');
         this.ctx.textAlign = 'center'
-
-        // Calcucated configs
+        
+        // Parse data
+        this.parseData(data);
+        
+        // Calculated configs
         this.config.unit_to_pixel = (this.config.display_size - this.config.display_margin * 2) / 24;
+        
+        // Draw first frame
+        this.drawFrame(0);        
     },
     
     unitToPixel: function(unit) {
@@ -137,14 +143,18 @@ var Visualizer = {
     },
     
     start: function() {
-        this.timer = setTimeout(function() { Visualizer.run.apply(Visualizer); }, 1);
+        this.playing = true;
+        setTimeout(function() { Visualizer.run.apply(Visualizer); }, 1);
+        $("#play-button").text("Stop");
     },
     
     stop: function() {
-        clearTimeout(this.timer);
+        this.playing = false;
+        $('#play-button').text("Start");
     },
     
     run: function() {
+      if(!this.playing) return;
       this.frameDrawStarted = new Date().getTime()
       
       if(this.frame >= Visualizer.moves.length ){
@@ -165,7 +175,7 @@ var Visualizer = {
       // Todo: If frameAdvance is the miniumum size (on a super fast system), then 
       // we need to delay drawing the next frame.
       var timeToNextDraw = 1;
-      this.timer = setTimeout(function() { Visualizer.run.apply(Visualizer); }, timeToNextDraw);
+      setTimeout(function() { Visualizer.run.apply(Visualizer); }, timeToNextDraw);
     },
     
     parseData: function(data) {
@@ -241,7 +251,36 @@ var ParserUtils = {
 };
 
 (function($) {
-    Visualizer.setup();
-    Visualizer.parseData(data);
-    Visualizer.start();
+    Visualizer.setup(data);
+    
+    // Hook buttons
+    $('#play-button').click(function() {
+        if(!Visualizer.playing) Visualizer.start();
+        else Visualizer.stop();
+        return false;
+    });
+    
+    $('#start-button').click(function() {
+        Visualizer.frame = 0;
+        Visualizer.drawFrame(Visualizer.frame);
+        return false;
+    });
+    
+    $('#end-button').click(function() {
+        Visualizer.frame = Visualizer.moves.length - 1;
+        Visualizer.drawFrame(Visualizer.frame);
+        return false;
+    });
+    
+    $('#prev-frame-button').click(function() {
+        Visualizer.frame = Math.floor(Visualizer.frame) - 1;
+        Visualizer.drawFrame(Visualizer.frame);
+        return false;
+    });
+    
+    $('#next-frame-button').click(function() {
+        Visualizer.frame = Math.floor(Visualizer.frame) + 1;
+        Visualizer.drawFrame(Visualizer.frame);
+        return false;
+    });
 })(window.jQuery);

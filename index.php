@@ -33,6 +33,13 @@ echo 'var data = "' . $input . '"';
     
     <div id="main">
         <canvas id="display" width="640" height="640"></canvas>
+        <p id="controls">
+            <a href="#" id="start-button">Begin</a> | 
+            <a href="#" id="prev-frame-button">&lt;</a> | 
+            <a href="#" id="play-button">Start</a> | 
+            <a href="#" id="next-frame-button">&gt;</a> | 
+            <a href="#" id="end-button">End</a>
+        </p>
     </div>
     
     <footer>
