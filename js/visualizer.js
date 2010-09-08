@@ -147,12 +147,12 @@ var Visualizer = {
     start: function() {
         this.playing = true;
         setTimeout(function() { Visualizer.run.apply(Visualizer); }, 1);
-        $("#play-button").text("Stop");
+        $("#play-button").html("&#9553;");
     },
     
     stop: function() {
         this.playing = false;
-        $('#play-button').text("Start");
+        $('#play-button').html("&#9654;");
     },
     
     run: function() {
