@@ -298,6 +298,9 @@ var ParserUtils = {
     // Hook buttons
     $('#play-button').click(function() {
         if(!Visualizer.playing){
+          if(Visualizer.frame > Visualizer.moves.length - 2){
+            Visualizer.setFrame(0);
+          }
           Visualizer.start();
         } else {
           Visualizer.stop();
