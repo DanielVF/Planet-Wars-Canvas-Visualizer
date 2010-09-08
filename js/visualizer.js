@@ -51,7 +51,12 @@ var Visualizer = {
       }
       for(var i = 0; i < this.dirtyRegions.length; i++) {
         var region = this.dirtyRegions[i];
-        ctx.fillRect(region[0],region[1],region[2],region[3]);
+        ctx.fillRect(
+          parseInt(region[0]),
+          parseInt(region[1]),
+          parseInt(region[2]),
+          parseInt(region[3])
+        );
       }
       this.dirtyRegions = [];
       
