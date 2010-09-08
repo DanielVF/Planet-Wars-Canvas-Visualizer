@@ -17,7 +17,7 @@ var Visualizer = {
       display_size: 640,
       display_margin: 50,
       turnsPerSecond: 8,
-      teamColor: ['rgb(72,84,84)','rgb(192,0,0)','rgb(120,168,192)']
+      teamColor: ['#455','#c00','#7ac']
     },
     
     setup: function(data) {
