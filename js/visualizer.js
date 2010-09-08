@@ -255,32 +255,41 @@ var ParserUtils = {
     
     // Hook buttons
     $('#play-button').click(function() {
-        if(!Visualizer.playing) Visualizer.start();
-        else Visualizer.stop();
+        if(!Visualizer.playing){
+          Visualizer.start();
+        } else {
+          Visualizer.stop();
+        }
         return false;
     });
     
     $('#start-button').click(function() {
         Visualizer.frame = 0;
         Visualizer.drawFrame(Visualizer.frame);
+        Visualizer.stop();
         return false;
     });
     
     $('#end-button').click(function() {
         Visualizer.frame = Visualizer.moves.length - 1;
         Visualizer.drawFrame(Visualizer.frame);
+        Visualizer.stop();
         return false;
     });
     
     $('#prev-frame-button').click(function() {
         Visualizer.frame = Math.floor(Visualizer.frame) - 1;
         Visualizer.drawFrame(Visualizer.frame);
+        Visualizer.stop();
         return false;
     });
     
     $('#next-frame-button').click(function() {
         Visualizer.frame = Math.floor(Visualizer.frame) + 1;
         Visualizer.drawFrame(Visualizer.frame);
+        Visualizer.stop();
         return false;
     });
+    
+    Visualizer.start();
 })(window.jQuery);
