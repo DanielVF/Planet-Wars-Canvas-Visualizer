@@ -8,7 +8,7 @@ var Visualizer = {
     moves: [],
     config : {
       planet_font: 'bold 15px Arial,Helvetica',
-      fleet_font: '12px Arial,Helvetica',
+      fleet_font: 'normal 12px Arial,Helvetica',
       planet_pixels: [10,13,18,21,23,29],
       display_size: 640,
       display_margin: 50,
@@ -21,9 +21,6 @@ var Visualizer = {
         this.canvas = document.getElementById('display');
         this.ctx = this.canvas.getContext('2d');
         this.ctx.textAlign = 'center'
-        
-        // Load background
-        this.background.src = 'bg.jpg';
 
         // Calcucated configs
         this.config.unit_to_pixel = (this.config.display_size - this.config.display_margin * 2) / 24;
@@ -40,16 +37,12 @@ var Visualizer = {
         var planetStats = this.moves[frameNumber].planets;
         var fleets = this.moves[frameNumber].moving;
         
-        // Game finished
-        if(frameNumber + 1 == this.moves.length) {
-            this.stop();
-            // TODO: show winner
-            return;
-        }
-    
         // Draw background image
-        ctx.drawImage(this.background, 0, 0);
-        
+        ctx.fillStyle = 'black'
+        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        // Draw Planets
+        this.ctx.font = this.config.planet_font
         for(var i = 0; i < this.planets.length; i++) {
             var planet = this.planets[i];
             planet.owner = planetStats[i].owner;
@@ -72,50 +65,41 @@ var Visualizer = {
             ctx.fillStyle = this.config.teamColor[planet.owner];
             ctx.fill();
 
-            // Set text
-            ctx.font = this.config.planet_font;
             ctx.fillStyle = "#fff";
             ctx.fillText(planet.numShips, disp_x, this.canvas.height - disp_y + 5);
         }
         
-        
+        // Draw Fleets
+        this.ctx.font = this.config.fleet_font
         for(var i = 0; i < fleets.length; i++) {
           var fleet = fleets[i];
           
-          var x = fleet.source.x + (fleet.destination.x - fleet.source.x) * fleet.progress;
-          var y = fleet.source.y + (fleet.destination.y - fleet.source.y) * fleet.progress;
-          disp_x = this.unitToPixel(x) + this.config.display_margin;
-          disp_y = this.unitToPixel(y) + this.config.display_margin;
+          fleet.x = fleet.source.x + (fleet.destination.x - fleet.source.x) * fleet.progress
+          fleet.y = fleet.source.y + (fleet.destination.y - fleet.source.y) * fleet.progress
+          disp_x = this.unitToPixel(fleet.x) + this.config.display_margin;
+          disp_y = this.unitToPixel(fleet.y) + this.config.display_margin;
           
-          ctx.font = this.config.fleet_font;
-          ctx.fillText(fleet.numShips, disp_x + 5, this.canvas.height - disp_y + 22);
-          
+          ctx.fillStyle = this.config.teamColor[fleet.owner];
           ctx.beginPath();
           ctx.save();
-          
           ctx.translate(disp_x, this.canvas.height - disp_y);
-          ctx.scale(0.15, 0.15);
-          ctx.rotate(-Math.PI/2);
-          
+          ctx.scale(0.1,0.1);
+          // ctx.rotate();
           ctx.moveTo(0, -10);
           ctx.lineTo(40,-30);
           ctx.lineTo(0, 100);
           ctx.lineTo(-40, -30);
           ctx.closePath();
-          
-          // Draw arrow
-          ctx.fillStyle = this.config.teamColor[fleet.owner];
-          ctx.strokeStyle = "#fff";
-          ctx.lineWidth = 5;
           ctx.fill();
+          ctx.strokeStyle = "#fff"
           ctx.stroke();
-          
           ctx.restore();
+          ctx.fillText(fleet.numShips, disp_x, this.canvas.height - disp_y - 4);
         }
     },
     
     start: function() {
-        this.interval = setInterval(function() { Visualizer.run.apply(Visualizer); }, 1000);
+        this.interval = setInterval(function() { Visualizer.run.apply(Visualizer); }, 100);
     },
     
     stop: function() {
@@ -123,6 +107,10 @@ var Visualizer = {
     },
     
     run: function() {
+        if(this.frame >= Visualizer.moves.length - 1 ){
+          this.stop();
+          return;
+        }
         this.drawFrame(this.frame);
         this.frame++;
     },
@@ -198,6 +186,5 @@ var ParserUtils = {
 (function($) {
     Visualizer.setup();
     Visualizer.parseData(data);
-    Visualizer.frame = 0;
-    Visualizer.start();
+    Visualizer.start()
 })(window.jQuery);
