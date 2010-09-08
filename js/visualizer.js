@@ -6,6 +6,7 @@ var Visualizer = {
     haveDrawnBackground: false,
     frameDrawStarted: null,
     frameDrawEnded: null,
+    players: ["Player A", "Player B"],
     planets: [],
     moves: [],
     dirtyRegions: [],
@@ -41,8 +42,9 @@ var Visualizer = {
     
     drawBackground: function(){
       var ctx = this.ctx;
-      ctx.fillStyle = 'black';
       
+      // Draw background
+      ctx.fillStyle = '#000';
       if(this.haveDrawnBackground==false){  
         ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         this.haveDrawnBackground = true;
@@ -52,6 +54,21 @@ var Visualizer = {
         ctx.fillRect(region[0],region[1],region[2],region[3]);
       }
       this.dirtyRegions = [];
+      
+      // Draw playernames
+      ctx.fillRect(0, 0, this.canvas.width, 40);
+      ctx.fillStyle = "#fff";
+      ctx.font = this.config.planet_font;
+      
+      ctx.textAlign = 'right';
+      ctx.fillText(this.players[0], this.canvas.width/2 - 30, 30);
+      ctx.textAlign = 'left';
+      ctx.fillText(this.players[1], this.canvas.width/2 + 30, 30);
+      
+      ctx.fillStyle = this.config.teamColor[1];
+      ctx.fillRect(this.canvas.width/2 - 20, 20, 10, 10);
+      ctx.fillStyle = this.config.teamColor[2];
+      ctx.fillRect(this.canvas.width/2 + 10, 20, 10, 10);
     },
     
     drawFrame: function(frame) { 
@@ -65,7 +82,8 @@ var Visualizer = {
         this.drawBackground();
         
         // Draw Planets
-        this.ctx.font = this.config.planet_font
+        ctx.font = this.config.planet_font;
+        ctx.textAlign = 'center';
         for(var i = 0; i < this.planets.length; i++) {
             var planet = this.planets[i];
             planet.owner = planetStats[i].owner;
@@ -187,8 +205,23 @@ var Visualizer = {
       this.frame = Math.max(0,Math.min(this.moves.length-1, targetFrame));
     },
     
-    parseData: function(data) {
-        data = data.split('|');
+    parseData: function(input) {
+        input = input.split(/\n/);
+        
+        var data;
+        if(input.length == 1) data = input[0];
+        else {
+            for(var i = 0; i < input.length; i++) {
+                var value = input[i].split('=');
+                switch(value[0]) {
+                    case "player_one": this.players[0] = value[1]; break;
+                    case "player_two": this.players[1] = value[1]; break;
+                    case "playback_string": data = value[1]; break;
+                }
+            }
+        }
+        
+        var data = data.split('|');
         
         // planets: [(x,y,owner,numShips,growthRate)]
         this.planets = data[0].split(':').map(ParserUtils.parsePlanet);

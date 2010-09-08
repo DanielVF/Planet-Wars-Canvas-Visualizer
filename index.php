@@ -46,7 +46,7 @@
   <script>
   <?php
   $input = file_get_contents('input');
-  echo 'var data = "' . $input . '"';
+  echo 'var data = "' . str_replace("\n", "\\n", $input) . '"';
   ?>
   </script>
   <script src="js/visualizer.js?v=1"></script>
