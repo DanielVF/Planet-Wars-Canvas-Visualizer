@@ -104,7 +104,7 @@ var Visualizer = {
           ctx.save();
           ctx.translate(disp_x, this.canvas.height - disp_y);
           
-          var scale = Math.log(fleet.numShips) * 0.05;
+          var scale = Math.log(fleet.numShips) * 0.03;
           ctx.scale(scale, scale);
           
           var angle = Math.PI/2 - Math.atan(
@@ -132,7 +132,7 @@ var Visualizer = {
           disp_y += -20 * Math.sin(angle) - 5;
           ctx.fillText(fleet.numShips, disp_x, this.canvas.height - disp_y);
           
-          this.dirtyRegions.push([disp_x - 20 , this.canvas.height - disp_y - 20, 40, 40])
+          this.dirtyRegions.push([disp_x - 30 , this.canvas.height - disp_y - 30, 55, 55])
         }
     },
     
