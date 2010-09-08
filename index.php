@@ -12,13 +12,6 @@
   <link rel="stylesheet" href="css/style.css?v=1">
   <script src="js/modernizr-1.5.min.js"></script>
   
-  <script>
-<?php
-$input = file_get_contents('input');
-echo 'var data = "' . $input . '"';
-?>
-  </script>
-
 </head>
 <!--[if lt IE 7 ]> <body class="ie6"> <![endif]-->
 <!--[if IE 7 ]>    <body class="ie7"> <![endif]-->
@@ -49,6 +42,12 @@ echo 'var data = "' . $input . '"';
 
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
   <script>!window.jQuery && document.write('<script src="js/jquery-1.4.2.min.js"><\/script>')</script>
+  <script>
+  <?php
+  $input = file_get_contents('input');
+  echo 'var data = "' . $input . '"';
+  ?>
+  </script>
   <script src="js/visualizer.js?v=1"></script>
 
   <!--[if lt IE 7 ]>
