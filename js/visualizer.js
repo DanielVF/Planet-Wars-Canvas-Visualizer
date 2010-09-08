@@ -132,7 +132,7 @@ var Visualizer = {
           disp_y += -20 * Math.sin(angle) - 5;
           ctx.fillText(fleet.numShips, disp_x, this.canvas.height - disp_y);
           
-          this.dirtyRegions.push([disp_x - 30 , this.canvas.height - disp_y - 30, 55, 55])
+          this.dirtyRegions.push([disp_x - 35 , this.canvas.height - disp_y - 35, 70, 70])
         }
     },
     
