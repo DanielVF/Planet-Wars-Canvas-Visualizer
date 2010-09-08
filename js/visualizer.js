@@ -147,7 +147,7 @@ var Visualizer = {
     run: function() {
       this.frameDrawStarted = new Date().getTime()
       
-      if(this.frame >= Visualizer.moves.length - 1 ){
+      if(this.frame >= Visualizer.moves.length ){
         this.stop();
         return;
       }
@@ -185,7 +185,10 @@ var Visualizer = {
 
         // turns: [(owner,numShips)] 
         // ++ [(owner,numShips,sourcePlanet,destinationPlanet,totalTripLength,turnsRemaining)]
-        var turns = data[1].split(':');
+        if(data.length < 2){ 
+          return // No turns.
+        } 
+        var turns = data[1].split(':').slice(0,-1);
         for(var i = 0; i < turns.length; i++) {
             var turn = turns[i].split(',');
             
