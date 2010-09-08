@@ -4,7 +4,6 @@ var Visualizer = {
     frame: 0,
     interval: null,
     haveDrawnBackground: false,
-    background: new Image(),
     planets: [],
     moves: [],
     dirtyRegions: [],
@@ -79,6 +78,7 @@ var Visualizer = {
             ctx.arc(disp_x, this.canvas.height - disp_y, this.config.planet_pixels[planet.growthRate], 0, Math.PI*2, true);
             ctx.closePath();
             ctx.fillStyle = this.config.teamColor[planet.owner];
+            // TODO: hightlight planet when a fleet has reached them
             ctx.fill();
 
             ctx.fillStyle = "#fff";
@@ -96,12 +96,24 @@ var Visualizer = {
           disp_x = this.unitToPixel(fleet.x) + this.config.display_margin;
           disp_y = this.unitToPixel(fleet.y) + this.config.display_margin;
           
+          // Draw ship
           ctx.fillStyle = this.config.teamColor[fleet.owner];
           ctx.beginPath();
           ctx.save();
           ctx.translate(disp_x, this.canvas.height - disp_y);
-          ctx.scale(0.1,0.1);
-          // ctx.rotate();
+          
+          var scale = Math.log(fleet.numShips) * 0.05;
+          ctx.scale(scale, scale);
+          
+          var angle = Math.PI/2 - Math.atan(
+              (fleet.source.y - fleet.destination.y) /
+              (fleet.source.x - fleet.destination.x)
+          );
+          if(fleet.source.x - fleet.destination.x < 0) {
+              angle = angle - Math.PI;
+          }
+          ctx.rotate(angle);
+          
           ctx.moveTo(0, -10);
           ctx.lineTo(40,-30);
           ctx.lineTo(0, 100);
@@ -111,7 +123,13 @@ var Visualizer = {
           ctx.strokeStyle = "#fff"
           ctx.stroke();
           ctx.restore();
-          ctx.fillText(fleet.numShips, disp_x, this.canvas.height - disp_y - 4);
+
+          // Draw text
+          angle = -1 * (angle + Math.PI/2); // switch the axis around a little
+          disp_x += -20 * Math.cos(angle);
+          disp_y += -20 * Math.sin(angle) - 5;
+          ctx.fillText(fleet.numShips, disp_x, this.canvas.height - disp_y);
+          
           this.dirtyRegions.push([disp_x - 20 , this.canvas.height - disp_y - 20, 40, 40])
         }
     },
@@ -205,5 +223,5 @@ var ParserUtils = {
 (function($) {
     Visualizer.setup();
     Visualizer.parseData(data);
-    Visualizer.start()
+    Visualizer.start();
 })(window.jQuery);
