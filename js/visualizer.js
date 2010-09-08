@@ -30,9 +30,10 @@ var Visualizer = {
         return this.config.unit_to_pixel * unit;
     },
     
-    drawFrame: function(frameNumber) { 
+    drawFrame: function(frame) { 
         var disp_x = 0, disp_y = 0;
         var ctx = this.ctx;
+        var frameNumber = Math.floor(frame);
         
         var planetStats = this.moves[frameNumber].planets;
         var fleets = this.moves[frameNumber].moving;
@@ -74,8 +75,9 @@ var Visualizer = {
         for(var i = 0; i < fleets.length; i++) {
           var fleet = fleets[i];
           
-          fleet.x = fleet.source.x + (fleet.destination.x - fleet.source.x) * fleet.progress
-          fleet.y = fleet.source.y + (fleet.destination.y - fleet.source.y) * fleet.progress
+          var progress = (fleet.progress + (frame - frameNumber)) / fleet.tripLength;
+          fleet.x = fleet.source.x + (fleet.destination.x - fleet.source.x) * progress
+          fleet.y = fleet.source.y + (fleet.destination.y - fleet.source.y) * progress
           disp_x = this.unitToPixel(fleet.x) + this.config.display_margin;
           disp_y = this.unitToPixel(fleet.y) + this.config.display_margin;
           
@@ -99,7 +101,7 @@ var Visualizer = {
     },
     
     start: function() {
-        this.interval = setInterval(function() { Visualizer.run.apply(Visualizer); }, 100);
+        this.interval = setInterval(function() { Visualizer.run.apply(Visualizer); }, 20);
     },
     
     stop: function() {
@@ -112,7 +114,7 @@ var Visualizer = {
           return;
         }
         this.drawFrame(this.frame);
-        this.frame++;
+        this.frame += 0.1;
     },
     
     parseData: function(data) {
@@ -155,7 +157,8 @@ var ParserUtils = {
             numShips: parseInt(data[1]),
             source: Visualizer.planets[data[2]],
             destination: Visualizer.planets[data[3]],
-            progress: (data[4] - data[5]) / data[4]
+            tripLength: parseInt(data[4]),
+            progress: parseInt(data[4] - data[5])
         };
     },
     
