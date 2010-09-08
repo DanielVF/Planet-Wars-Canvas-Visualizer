@@ -178,6 +178,13 @@ var Visualizer = {
       setTimeout(function() { Visualizer.run.apply(Visualizer); }, timeToNextDraw);
     },
     
+    setFrame: function(targetFrame, wholeNumber){
+      if(wholeNumber===true){
+        targetFrame = Math.floor(targetFrame);
+      }
+      this.frame = Math.max(0,Math.min(this.moves.length-1, targetFrame));
+    },
+    
     parseData: function(data) {
         data = data.split('|');
         
@@ -264,28 +271,28 @@ var ParserUtils = {
     });
     
     $('#start-button').click(function() {
-        Visualizer.frame = 0;
+        Visualizer.setFrame(0);
         Visualizer.drawFrame(Visualizer.frame);
         Visualizer.stop();
         return false;
     });
     
     $('#end-button').click(function() {
-        Visualizer.frame = Visualizer.moves.length - 1;
+        Visualizer.setFrame(Visualizer.moves.length - 1, true);
         Visualizer.drawFrame(Visualizer.frame);
         Visualizer.stop();
         return false;
     });
     
     $('#prev-frame-button').click(function() {
-        Visualizer.frame = Math.floor(Visualizer.frame) - 1;
+        Visualizer.setFrame(Visualizer.frame - 1, true);
         Visualizer.drawFrame(Visualizer.frame);
         Visualizer.stop();
         return false;
     });
     
     $('#next-frame-button').click(function() {
-        Visualizer.frame = Math.floor(Visualizer.frame) + 1;
+        Visualizer.setFrame(Visualizer.frame + 1);
         Visualizer.drawFrame(Visualizer.frame);
         Visualizer.stop();
         return false;
