@@ -3,9 +3,11 @@ var Visualizer = {
     ctx: null,
     frame: 0,
     interval: null,
+    haveDrawnBackground: false,
     background: new Image(),
     planets: [],
     moves: [],
+    dirtyRegions: [],
     config : {
       planet_font: 'bold 15px Arial,Helvetica',
       fleet_font: 'normal 12px Arial,Helvetica',
@@ -30,6 +32,21 @@ var Visualizer = {
         return this.config.unit_to_pixel * unit;
     },
     
+    drawBackground: function(){
+      var ctx = this.ctx;
+      ctx.fillStyle = 'black';
+      
+      if(this.haveDrawnBackground==false){  
+        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        this.haveDrawnBackground = true;
+      }
+      for(var i = 0; i < this.dirtyRegions.length; i++) {
+        var region = this.dirtyRegions[i];
+        ctx.fillRect(region[0],region[1],region[2],region[3]);
+      }
+      this.dirtyRegions = [];
+    },
+    
     drawFrame: function(frame) { 
         var disp_x = 0, disp_y = 0;
         var ctx = this.ctx;
@@ -38,10 +55,8 @@ var Visualizer = {
         var planetStats = this.moves[frameNumber].planets;
         var fleets = this.moves[frameNumber].moving;
         
-        // Draw background image
-        ctx.fillStyle = 'black'
-        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
+        this.drawBackground();
+        
         // Draw Planets
         this.ctx.font = this.config.planet_font
         for(var i = 0; i < this.planets.length; i++) {
@@ -97,6 +112,7 @@ var Visualizer = {
           ctx.stroke();
           ctx.restore();
           ctx.fillText(fleet.numShips, disp_x, this.canvas.height - disp_y - 4);
+          this.dirtyRegions.push([disp_x - 20 , this.canvas.height - disp_y - 20, 40, 40])
         }
     },
     
