@@ -152,8 +152,8 @@ var Visualizer = {
 
           // Draw text
           angle = -1 * (angle + Math.PI/2); // switch the axis around a little
-          disp_x += -20 * Math.cos(angle);
-          disp_y += -20 * Math.sin(angle) - 5;
+          disp_x += -11 * Math.cos(angle);
+          disp_y += -11 * Math.sin(angle) - 5;
           ctx.fillText(fleet.numShips, disp_x, this.canvas.height - disp_y);
           
           this.dirtyRegions.push([disp_x - 35 , this.canvas.height - disp_y - 35, 70, 70])
