@@ -2,9 +2,10 @@ var Visualizer = {
     canvas: null,
     ctx: null,
     frame: 0,
-    interval: null,
+    timer: null,
     haveDrawnBackground: false,
-    background: new Image(),
+    frameDrawStarted: null,
+    frameDrawEnded: null,
     planets: [],
     moves: [],
     dirtyRegions: [],
@@ -14,7 +15,7 @@ var Visualizer = {
       planet_pixels: [10,13,18,21,23,29],
       display_size: 640,
       display_margin: 50,
-      framerate: 5,
+      turnsPerSecond: 8,
       teamColor: ['rgb(72,84,84)','rgb(192,0,0)','rgb(120,168,192)']
     },
     
@@ -117,20 +118,35 @@ var Visualizer = {
     },
     
     start: function() {
-        this.interval = setInterval(function() { Visualizer.run.apply(Visualizer); }, 20);
+        this.timer = setTimeout(function() { Visualizer.run.apply(Visualizer); }, 1);
     },
     
     stop: function() {
-        clearInterval(this.interval);
+        clearTimeout(this.timer);
     },
     
     run: function() {
-        if(this.frame >= Visualizer.moves.length - 1 ){
-          this.stop();
-          return;
-        }
-        this.drawFrame(this.frame);
-        this.frame += 0.1;
+      this.frameDrawStarted = new Date().getTime()
+      
+      if(this.frame >= Visualizer.moves.length - 1 ){
+        this.stop();
+        return;
+      }
+      this.drawFrame(this.frame);
+      
+      var frameAdvance = (this.frameDrawStarted - this.frameDrawEnded) / (1000 / this.config.turnsPerSecond )
+      if(isNaN(frameAdvance)){
+        frameAdvance = 0.3;
+      }
+      
+      this.frame += Math.min(1,Math.max(0.0166, frameAdvance ));
+      this.frameDrawEnded = new Date().getTime();
+      
+      
+      // Todo: If frameAdvance is the miniumum size (on a super fast system), then 
+      // we need to delay drawing the next frame.
+      var timeToNextDraw = 1;
+      this.timer = setTimeout(function() { Visualizer.run.apply(Visualizer); }, timeToNextDraw);
     },
     
     parseData: function(data) {
