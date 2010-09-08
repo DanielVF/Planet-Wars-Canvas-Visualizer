@@ -26,6 +26,7 @@
     
     <div id="main">
         <canvas id="display" width="640" height="640"></canvas>
+        <p id="turnCounter"></p>
         <p id="controls">
             <a href="#" id="start-button">Begin</a> | 
             <a href="#" id="prev-frame-button">&lt;</a> | 

@@ -140,6 +140,8 @@ var Visualizer = {
           
           this.dirtyRegions.push([disp_x - 35 , this.canvas.height - disp_y - 35, 70, 70])
         }
+        
+        $(this.canvas).trigger('drawn');
     },
     
     start: function() {
@@ -297,6 +299,10 @@ var ParserUtils = {
         Visualizer.stop();
         return false;
     });
+    
+    $('#display').bind('drawn', function(){
+      $('#turnCounter').html('Turn: '+Math.floor(Visualizer.frame+1)+' of '+Visualizer.moves.length)
+    })
     
     Visualizer.start();
 })(window.jQuery);
