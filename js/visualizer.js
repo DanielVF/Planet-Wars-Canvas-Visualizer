@@ -104,7 +104,7 @@ var Visualizer = {
           ctx.save();
           ctx.translate(disp_x, this.canvas.height - disp_y);
           
-          var scale = Math.log(fleet.numShips) * 0.03;
+          var scale = Math.log(Math.max(fleet.numShips,4)) * 0.03;
           ctx.scale(scale, scale);
           
           var angle = Math.PI/2 - Math.atan(
