@@ -290,7 +290,7 @@ var ParserUtils = {
     Visualizer.setup(data);
     
     // Hook buttons
-    $('#play-button').click(function() {
+    var playAction = function() {
         if(!Visualizer.playing){
           if(Visualizer.frame > Visualizer.moves.length - 2){
             Visualizer.setFrame(0);
@@ -300,7 +300,8 @@ var ParserUtils = {
           Visualizer.stop();
         }
         return false;
-    });
+    }
+    $('#play-button').click(playAction);
     
     $('#start-button').click(function() {
         Visualizer.setFrame(0);
@@ -315,20 +316,35 @@ var ParserUtils = {
         Visualizer.stop();
         return false;
     });
-    
-    $('#prev-frame-button').click(function() {
+
+    var prevAction = function() {
         Visualizer.setFrame(Visualizer.frame - 1, true);
         Visualizer.drawFrame(Visualizer.frame);
         Visualizer.stop();
         return false;
-    });
+    }
+    $('#prev-frame-button').click(prevAction);
     
-    $('#next-frame-button').click(function() {
+    var nextAction = function() {
         Visualizer.setFrame(Visualizer.frame + 1);
         Visualizer.drawFrame(Visualizer.frame);
         Visualizer.stop();
         return false;
-    });
+    }
+    $('#next-frame-button').click(nextAction);
+    
+    $(document.documentElement).keydown(function(evt){
+        if(evt.keyCode == '37'){ // Left Arrow
+            prevAction();
+            return false;
+        }else if(evt.keyCode == '39'){ // Right Arrow
+            nextAction();
+            return false;
+        }else if(evt.keyCode == '32'){ // Spacebar
+            playAction();
+            return false;
+        }
+    })
     
     $('#display').bind('drawn', function(){
       $('#turnCounter').html('Turn: '+Math.floor(Visualizer.frame+1)+' of '+Visualizer.moves.length)
