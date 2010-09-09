@@ -108,7 +108,7 @@ var Visualizer = {
         for(var i = 0; i < fleets.length; i++) {
           var fleet = fleets[i];
           
-          var progress = (fleet.progress + 1 + (frame - frameNumber)) / (fleet.tripLength + 1);
+          var progress = (fleet.progress + 1 + (frame - frameNumber)) / (fleet.tripLength + 2);
           fleet.x = fleet.source.x + (fleet.destination.x - fleet.source.x) * progress
           fleet.y = fleet.source.y + (fleet.destination.y - fleet.source.y) * progress
           disp_x = this.unitToPixel(fleet.x) + this.config.display_margin;
