@@ -14,6 +14,7 @@ var Visualizer = {
       planet_font: 'bold 15px Arial,Helvetica',
       fleet_font: 'normal 12px Arial,Helvetica',
       planet_pixels: [10,13,18,21,23,29],
+      showFleetText: true,
       display_size: 640,
       display_margin: 50,
       turnsPerSecond: 8,
@@ -142,10 +143,12 @@ var Visualizer = {
           ctx.restore();
 
           // Draw text
-          angle = -1 * (angle + Math.PI/2); // switch the axis around a little
-          disp_x += -11 * Math.cos(angle);
-          disp_y += -11 * Math.sin(angle) - 5;
-          ctx.fillText(fleet.numShips, disp_x, this.canvas.height - disp_y);
+          if(this.config.showFleetText==true){
+            angle = -1 * (angle + Math.PI/2); // switch the axis around a little
+            disp_x += -11 * Math.cos(angle);
+            disp_y += -11 * Math.sin(angle) - 5;
+            ctx.fillText(fleet.numShips, disp_x, this.canvas.height - disp_y);
+          }
           
           this.dirtyRegions.push([disp_x - 35 , this.canvas.height - disp_y - 35, 70, 70])
         }
