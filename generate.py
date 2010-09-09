@@ -14,6 +14,7 @@ import os
 import webbrowser
 
 def generate(data, generated_path):
+    path = os.path.dirname(__file__)
     template_path = os.path.join(path, 'index.php')
     template = open(template_path, 'r')
     content = template.read()
