@@ -150,7 +150,7 @@ var Visualizer = {
             ctx.fillText(fleet.numShips, disp_x, this.canvas.height - disp_y);
           }
           
-          this.dirtyRegions.push([disp_x - 35 , this.canvas.height - disp_y - 35, 70, 70])
+          this.dirtyRegions.push([disp_x - 25 , this.canvas.height - disp_y - 35, 50, 50])
         }
         
         $(this.canvas).trigger('drawn');
