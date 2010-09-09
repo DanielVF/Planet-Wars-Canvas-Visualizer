@@ -60,20 +60,6 @@ var Visualizer = {
       }
       this.dirtyRegions = [];
       
-      // Draw playernames
-      ctx.fillRect(0, 0, this.canvas.width, 40);
-      ctx.fillStyle = "#fff";
-      ctx.font = this.config.planet_font;
-      
-      ctx.textAlign = 'right';
-      ctx.fillText(this.players[0], this.canvas.width/2 - 30, 30);
-      ctx.textAlign = 'left';
-      ctx.fillText(this.players[1], this.canvas.width/2 + 30, 30);
-      
-      ctx.fillStyle = this.config.teamColor[1];
-      ctx.fillRect(this.canvas.width/2 - 20, 20, 10, 10);
-      ctx.fillStyle = this.config.teamColor[2];
-      ctx.fillRect(this.canvas.width/2 + 10, 20, 10, 10);
     },
     
     drawFrame: function(frame) { 
@@ -344,6 +330,13 @@ var ParserUtils = {
     $('#display').bind('drawn', function(){
       $('#turnCounter').html('Turn: '+Math.floor(Visualizer.frame+1)+' of '+Visualizer.moves.length)
     })
+    
+    $('.player1Name').text(Visualizer.players[0])
+    $('.player1Name').css('color',Visualizer.config.teamColor[1])
+    $('.player2Name').text(Visualizer.players[1])
+    $('.player2Name').css('color',Visualizer.config.teamColor[2])
+    $('.playerVs').text('v.s.')
+    $('title').text(Visualizer.players[0]+' v.s. '+Visualizer.players[1]+' - Planet Wars')
     
     Visualizer.start();
 })(window.jQuery);

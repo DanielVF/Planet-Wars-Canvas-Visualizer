@@ -91,7 +91,15 @@ h1 {
     padding: 0 10px;
 }
 
-#controls a .small{ font-size: 0.7em;}
+#controls a .small{ 
+  font-size: 0.7em;
+}
+
+#players {
+  font-size: 24px;
+  width:100%;
+  margin-bottom: 5px;
+}
 
 /* 
  * print styles
