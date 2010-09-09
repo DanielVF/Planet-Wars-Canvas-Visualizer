@@ -3,7 +3,7 @@
 This module lets you run a command like:
 
     java -jar tools/PlayGame.jar map.txt 100 100 log "./bot1" "./bot2" | \
-    python visualizer/generate.py
+    python visualizer/visualize_localy.py
 
 It then generates the visualisation and opens it in your browser. Awesome!
 """
@@ -32,7 +32,7 @@ if __name__ == "__main__":
     data = raw_input()
 
     path = os.path.dirname(__file__)
-    generated_path = os.path.join(path, 'generated.htm')
+    generated_path = os.path.realpath(os.path.join(path, 'generated.htm'))
 
     generate(data, generated_path)
-    webbrowser.open(generated_path)
+    webbrowser.open('file://'+generated_path)
