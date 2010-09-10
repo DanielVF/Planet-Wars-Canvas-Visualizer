@@ -15,7 +15,6 @@ var Visualizer = {
       fleet_font: 'normal 12px Arial,Helvetica',
       planet_pixels: [10,13,18,21,23,29],
       showFleetText: true,
-      display_size: 640,
       display_margin: 50,
       turnsPerSecond: 8,
       teamColor: ['#455','#c00','#7ac']
@@ -31,7 +30,7 @@ var Visualizer = {
         this.parseData(data);
         
         // Calculated configs
-        this.config.unit_to_pixel = (this.config.display_size - this.config.display_margin * 2) / 24;
+        this.config.unit_to_pixel = (this.canvas.height - this.config.display_margin * 2) / 24;
         
         // Draw first frame
         this.drawFrame(0);        
