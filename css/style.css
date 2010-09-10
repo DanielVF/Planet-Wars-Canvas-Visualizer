@@ -101,6 +101,12 @@ h1 {
   margin-bottom: 5px;
 }
 
+#chart {
+    background:white; 
+    border-top: solid 1px #607890;
+    border-bottom: solid 1px #607890;
+}
+
 /* 
  * print styles
  */
